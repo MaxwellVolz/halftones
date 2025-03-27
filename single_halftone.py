@@ -12,7 +12,12 @@ def halftone_svg(image_path, output_path="halftone.svg", block_size=10, max_radi
     for y in range(data.shape[0]):
         for x in range(data.shape[1]):
             brightness = 255 - data[y, x]  # invert: darker → bigger
-            radius = (brightness / 255) * max_radius
+            # radius = (brightness / 255) * max_radius
+
+            radius = max((brightness / 255) * (max_radius), 0.5)
+
+
+
             if radius > 0:
                 cx = x * block_size + block_size / 2
                 cy = y * block_size + block_size / 2

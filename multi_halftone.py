@@ -5,7 +5,7 @@ import os
 
 # Multi-layer halftone pattern for making 5x7 postcard stencils
 
-def multi_layer_halftone(image_path, out_dir="output", block_size=10, max_radius=5, num_layers=3):
+def multi_layer_halftone(image_path, out_dir="output", block_size=10, max_radius=5, num_layers=1):
 
     DOT_AREA_WIDTH = 127
     DOT_AREA_HEIGHT = 178
@@ -50,7 +50,11 @@ def multi_layer_halftone(image_path, out_dir="output", block_size=10, max_radius
             for i in range(num_layers):
                 low, high = layer_ranges[i], layer_ranges[i+1]
                 if low <= brightness < high:
-                    radius = (inverted / 255) * (max_radius * scale / block_size)
+                    # radius = (inverted / 255) * (max_radius * scale / block_size)
+
+                    # clamp min diameter to 1mm
+                    radius = max((inverted / 255) * (max_radius * scale / block_size), 0.5)
+
 
                     if radius > 0:
                         drawings[i].add(drawings[i].circle(center=(cx, cy), r=radius, fill="black"))
